@@ -1,0 +1,35 @@
+﻿@model Documents.Models.Document
+
+@{
+    ViewBag.Title = "Create";
+    var X = Html.X();
+}
+
+
+@(X.Label()
+.Text("Name")
+)
+@(X.TextField()
+.ID("id1")
+)
+@(X.Label()
+.Text("Tag")
+)
+@(X.TextField()
+.ID("id2")
+)
+
+    @(X.Button()
+        .Text("Create")
+        .DirectEvents(de => {
+            de.Click.Url = Url.Action("Create");
+                de.Click.EventMask.ShowMask = true;
+                de.Click.ExtraParams.Add(
+                    new Parameter("Name", "Ext.getCmp('id1').getValue()", ParameterMode.Value));
+                de.Click.ExtraParams.Add(
+                    new Parameter("Tags", "Ext.getCmp('id2').getValue()", ParameterMode.Value));
+                
+            }
+        )
+)
+    

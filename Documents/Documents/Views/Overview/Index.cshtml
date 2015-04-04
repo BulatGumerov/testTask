@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Documents.Models.Document>
+
+@{
+    var X = Html.X();
+}
+
+
+
+
+    
+
+@(X.Panel()
+    .Region(Region.South)
+    .Height(300)
+    .Items(
+        Html.X().GridPanel()
+            .ID("ticketList")
+            .Height(400)
+            .ColumnModel(
+            Html.X().ColumnFor(Model, m => m.Author)
+                .ToBuilder<Column.Builder>()
+                .Width(40),
+
+            Html.X().ColumnFor(Model, m => m.Name)
+                .ToBuilder<Column.Builder>()
+                .Flex(1),
+
+            Html.X().ColumnFor(Model, m => m.ReleaseDate)
+                .ToBuilder<Column.Builder>()
+                .Flex(1),
+
+            Html.X().ColumnFor(Model, m => m.Tags)
+                .ToBuilder<Column.Builder>()
+                .Flex(1),
+            X.CommandColumn()
+                .Text("openColumn")
+                .Commands(
+                    X.GridCommand()
+                        .CommandName("open")
+                        .Icon(Icon.BookOpen)
+                        .ToolTip(tt=>tt.Text = "open")
+                        )
+                .DirectEvents(
+                de => {
+                    de.Command.Url = Url.Action("Open");
+                    de.Command.ExtraParams.Add(
+                            new Parameter("path", "record.data.ReleaseDate", ParameterMode.Raw));
+                
+                    })
+            )
+            .Store(
+            Html.X().Store()
+                .ID("Store1")
+                .DataSource(Model)
+                .Model(
+                    Html.X().Model()
+                        .IDProperty("ReleaseDate")
+                        .Fields(
+                            Html.X().ModelField().Name("Author").Type(ModelFieldType.String),
+                            Html.X().ModelField().Name("Name").Type(ModelFieldType.String),
+                            Html.X().ModelField().Name("ReleaseDate").Type(ModelFieldType.String),
+                            Html.X().ModelField().Name("Tags").Type(ModelFieldType.String)
+                        )
+                            
+                )
+                )
+                   
+        )                
+)
+
+
+
+
+
+
+    
+    
+    
+   

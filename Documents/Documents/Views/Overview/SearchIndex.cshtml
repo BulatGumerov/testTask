@@ -1,0 +1,121 @@
+﻿@model IEnumerable<Documents.Models.Document>
+
+@{
+    ViewBag.Title = "SearchIndex";
+    var X = Html.X();
+
+}
+
+
+
+
+
+
+
+
+<p>
+    
+       @using (Html.BeginForm()){   
+         <p>
+           Name: @Html.TextBox("name")  
+           Tags: @Html.TextBox("tags")  
+         <input type="submit" value="Filter" /></p>
+        }
+
+</p>
+<table>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            ReleaseDate
+        </th>
+        <th>
+            Author
+        </th>
+        <th>
+            Tags
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReleaseDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Author)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tags)
+        </td>
+    </tr>
+}
+
+</table>
+
+
+
+@*@(X.Panel()
+    .Region(Region.South)
+    .Height(300)
+    .Items(
+        Html.X().GridPanel()
+            .ID("ticketList")
+            .Height(400)
+            .ColumnModel(
+            Html.X().ColumnFor(Model, m => m.Author)
+                .ToBuilder<Column.Builder>()
+                .Width(40),
+
+            Html.X().ColumnFor(Model, m => m.Name)
+                .ToBuilder<Column.Builder>()
+                .Flex(1),
+
+            Html.X().ColumnFor(Model, m => m.ReleaseDate)
+                .ToBuilder<Column.Builder>()
+                .Flex(1),
+
+            Html.X().ColumnFor(Model, m => m.Tags)
+                .ToBuilder<Column.Builder>()
+                .Flex(1),
+            X.CommandColumn()
+                .Commands(
+                    X.GridCommand()
+                        .CommandName("open")
+                        .Icon(Icon.BookOpen)
+                        .ToolTip(tt=>tt.Text = "open")
+                        )
+                .DirectEvents(
+                de => {
+                    de.Command.Url = Url.Action("Open");
+                    de.Command.ExtraParams.Add(
+                            new Parameter("path", "record.data.ReleaseDate", ParameterMode.Raw));
+                
+                    })
+            )
+            .Store(
+            Html.X().Store()
+                
+                .ID("Store1")
+                .DataSource(Model)
+                .Model(
+                    Html.X().Model()
+                        .IDProperty("ReleaseDate")
+                        .Fields(
+                            Html.X().ModelField().Name("Author").Type(ModelFieldType.String),
+                            Html.X().ModelField().Name("Name").Type(ModelFieldType.String),
+                            Html.X().ModelField().Name("ReleaseDate").Type(ModelFieldType.String),
+                            Html.X().ModelField().Name("Tags").Type(ModelFieldType.String)
+                        )
+                            
+                )
+                    
+         )
+        )                
+)*@

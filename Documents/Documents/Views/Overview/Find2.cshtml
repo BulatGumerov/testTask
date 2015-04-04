@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Documents.Models.Document>
+
+@{
+    ViewBag.Title = "Button Control Variations - Ext.NET MVC Examples";
+
+    var X = Html.X();
+}
+
+@Html.X().ResourceManager()
+
+@(X.Panel()
+    .Region(Region.North)
+    .Height(150)
+    .Items(
+        X.Button()
+        .Text("Index")
+        .DirectClickAction("IndexAction"),
+        X.Button()
+        .Text("Create")
+        .DirectClickAction("CreateAction"),
+        X.Button()
+        .Text("Find")
+        .DirectClickAction("FindAction")
+    )
+)
+
+
+@(X.Panel()
+    .Region(Region.South)
+    .Height(300)
+    .Items(
+        Html.X().GridPanel()
+            .ID("ticketList")
+            .Height(400)
+            .ColumnModel(
+            Html.X().ColumnFor(Model, m => m.Author)
+                .ToBuilder<Column.Builder>()
+                .Width(40),
+
+            Html.X().ColumnFor(Model, m => m.Name)
+                .ToBuilder<Column.Builder>()
+                .Flex(1),
+
+            Html.X().ColumnFor(Model, m => m.ReleaseDate)
+                .ToBuilder<Column.Builder>()
+                .Flex(1),
+
+            Html.X().ColumnFor(Model, m => m.Tags)
+                .ToBuilder<Column.Builder>()
+                .Flex(1),
+            X.CommandColumn()
+                .Commands(
+                    X.GridCommand()
+                        .CommandName("open")
+                        .Icon(Icon.BookOpen)
+                        .ToolTip(tt=>tt.Text = "open")
+                        )
+                .DirectEvents(
+                de => {
+                    de.Command.Url = Url.Action("Open");
+                    de.Command.ExtraParams.Add(
+                            new Parameter("path", "record.data.ReleaseDate", ParameterMode.Raw));
+                
+                    })
+            )
+            .Store(
+            Html.X().Store()
+                .ID("Store1")
+                .DataSource(Model)
+                .Model(
+                    Html.X().Model()
+                        .IDProperty("ReleaseDate")
+                        .Fields(
+                            Html.X().ModelField().Name("Author").Type(ModelFieldType.String),
+                            Html.X().ModelField().Name("Name").Type(ModelFieldType.String),
+                            Html.X().ModelField().Name("ReleaseDate").Type(ModelFieldType.String),
+                            Html.X().ModelField().Name("Tags").Type(ModelFieldType.String)
+                        )
+                            
+                )
+                    
+                .PageSize(3)
+                .ServerProxy(
+                    Html.X().AjaxProxy()
+                        .Url(Url.Action("Index"))
+                        .API(api=>api.Sync = Url.Action("Sync"))
+                        )
+                    )
+                .Buttons()
+        )                
+)
