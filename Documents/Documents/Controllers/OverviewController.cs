@@ -52,27 +52,24 @@ namespace Documents.Controllers
             System.Diagnostics.Process.Start(Server.MapPath("~/XmlFiles/" + path + ".xml"));
         }
 
-        [DirectMethod, HttpPost]
-        public ActionResult Find(string name, string tags)
-        {
-            var docList = Util.SearchXml(name, tags);
-            return View(docList);
-        }
-
-        public ActionResult Find()
-        {
-            return View();
-        }
-
-        public ActionResult FindAction()
-        {
-            return this.Redirect(Url.Action("Find"));
-        }
-
 
         public ActionResult SearchIndexAction()
         {
             return this.Redirect(Url.Action("SearchIndex"));
+        }
+
+        public ActionResult SearchIndex(string name, string tags)
+        {
+            var docList = Util.GetAllXml();
+            if (name == null && tags == null)
+            {
+                return View(docList);
+            }
+            else
+            {
+                var resultDoc = docList.Where(a => a.Name.Contains(name) && a.Tags.Contains(tags));
+                return View(resultDoc);
+            }
         }
 
         protected override void Dispose(bool disposing)
